@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YBO - Login</title>
+  <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #12131c 0%, #1a1c29 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #f1f1f1;
+    }
+
+    .login-container {
+        background: #1f2235;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 400px;
+        border: 1px solid #2f3454;
+    }
+
+    h2 {
+        margin-bottom: 25px;
+        color: #ffffff;
+        text-align: center;
+        font-weight: 600;
+        font-size: 26px;
+        letter-spacing: 0.5px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #989fc0;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 12px 14px;
+        background: #161824;
+        border: 1px solid #2f3454;
+        border-radius: 6px;
+        font-size: 15px;
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    .input-group input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.1s ease;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        margin-top: 10px;
+    }
+
+    .btn-login:hover {
+        background: #1d4ed8;
+    }
+
+    .btn-login:active {
+        transform: scale(0.98);
+    }
+
+
+    .error-msg {
+        color: #ff4a4a;
+        margin-top: 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <h2>Login to YBO</h2>
+
+  <div class="form-wrapper">
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username" >
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" >
+    </div>
+    <button type="button" class="btn-login" onclick="sendLoginRequest()">Log In</button>
+    <p id="errorMessage" class="error-msg"></p>
+    <button type="button" class="btn-login" onclick="window.location.href='/register'">Register as user</button>
+  </div>
+</div>
+
+<script>
+
+  async function sendLoginRequest() {
+      const errorParagraph = document.getElementById('errorMessage');
+      errorParagraph.style.display = "none";
+      errorParagraph.textContent = "";
+
+      const logInData = {
+              username: document.getElementById('username').value,
+              password: document.getElementById('password').value
+      };
+
+      for (const [fieldName, value] of Object.entries(logInData)) {
+        if (!value || value === "") {
+            errorParagraph.textContent = `you should fill all rows!`;
+            errorParagraph.style.display = "block";
+            return;
+        }
+      }
+
+      console.log("request is sent...");
+
+      try {
+          const response = await fetch('/ybo/auth/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(logInData)
+          });
+
+          if (response.ok) {
+              const data = await response.json();
+              localStorage.setItem('token', data.token);
+
+              const role = data.role || "";
+              window.location.href = role.includes('[COMPANY]') ? '/company/home' : '/user/home';
+          }
+          else {
+              const errorData = await response.json();
+              errorParagraph.style.display = "block";
+              errorParagraph.textContent = errorData.message;
+              console.log("error object:", errorData);
+          }
+      } catch (error) {
+          errorParagraph.style.display = "block";
+          errorParagraph.textContent = "Server error!";
+          console.error("Error:", error);
+      }
+  }
+</script>
+</body>
+</html>

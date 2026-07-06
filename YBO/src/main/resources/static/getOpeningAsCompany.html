@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YBO - Company Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top center, #1b1d30 0%, #0c0d14 100%);
+            min-height: 100vh;
+            padding: 60px 20px;
+            color: #e2e8f0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .container {
+            background: rgba(22, 24, 38, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        h1 {
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 32px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-dashboard-nav {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-dashboard-nav:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #94a3b8;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        #openingsList, #jobRequestList {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .opening-box {
+            background: rgba(13, 14, 23, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .opening-box:hover {
+            border-color: rgba(99, 102, 241, 0.35);
+            background: rgba(20, 22, 36, 0.85);
+            transform: translateX(4px);
+        }
+
+        .opening-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .profession-title {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .meta-inline {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .meta-inline strong {
+            color: #818cf8;
+            font-weight: 600;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            background: #4f46e5;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #4338ca;
+        }
+
+        .btn:disabled {
+            background: #1e293b;
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .pagination-container {
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .detail-card {
+            margin-top: 5px;
+            padding: 32px;
+            background: rgba(13, 14, 23, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+        }
+
+        .detail-card h2 {
+            font-size: 26px;
+            margin-bottom: 24px;
+            text-transform: none;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
+        }
+
+        .detail-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .detail-row {
+            display: flex;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row strong {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 180px;
+            flex-shrink: 0;
+            padding-top: 2px;
+        }
+
+        .detail-row span {
+            color: #e2e8f0;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap; /* For better text formatting */
+        }
+
+        .no-openings {
+            color: #64748b;
+            text-align: center;
+            padding: 40px;
+            font-size: 14px;
+            background: rgba(13, 14, 23, 0.3);
+            border-radius: 10px;
+            border: 1px dashed rgba(255, 255, 255, 0.05);
+        }
+
+        .requests-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+        }
+        .requests-header h2 {
+            margin-bottom: 0;
+            color: #818cf8;
+        }
+
+        /* CV Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #161826;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        .cv-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .cv-header h3 {
+            color: #ffffff;
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .opening-box { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .btn { width: 100%; text-align: center; }
+            .detail-row { flex-direction: column; gap: 4px; }
+            .requests-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-wrapper">
+        <h1>Company Dashboard</h1>
+        <button class="btn-dashboard-nav" onclick="window.location.href='/company/home'">← Dashboard</button>
+    </div>
+    <p class="subtitle">Manage and monitor your published job openings</p>
+
+    <div id="listView">
+        <h2>Your Active Openings</h2>
+        <div id="openingsList"></div>
+        <div class="pagination-container">
+            <button id="prevBtn" class="btn" onclick="changePage(-1)">Back</button>
+            <span id="pageInfo">Page: 1 / 1</span>
+            <button id="nextBtn" class="btn" onclick="changePage(1)">Forward</button>
+        </div>
+    </div>
+
+    <div id="detailView" class="hidden">
+        <button class="btn btn-secondary" onclick="showListView()">← Back to Dashboard</button>
+        <div class="detail-card">
+            <h2 id="detProfession">Profession Name</h2>
+            <div class="detail-grid">
+                <div class="detail-row"><strong>Salary</strong><span id="detSalary"></span></div>
+                <div class="detail-row"><strong>Schedule</strong><span id="detSchedule"></span></div>
+                <div class="detail-row"><strong>Job Responsibilities</strong><span id="detJobToDo"></span></div>
+                <div class="detail-row"><strong>Experience Required</strong><span id="detExperience"></span></div>
+                <div class="detail-row"><strong>Work Location</strong><span id="detAddress"></span></div>
+                <div class="detail-row"><strong>Contact Phone</strong><span id="detPhone"></span></div>
+            </div>
+
+            <div id="jobRequestView">
+                <div class="requests-header">
+                    <h2>Job Applications</h2>
+                    <button id="loadReqBtn" class="btn">View Requests</button>
+                </div>
+
+                <div id="jobRequestList"></div>
+
+                <div class="pagination-container hidden" id="reqPagination">
+                    <button id="prevBtnReq" class="btn" onclick="changeReqPage(-1)">Back</button>
+                    <span id="pageInfoReq">Page: 1 / 1</span>
+                    <button id="nextBtnReq" class="btn" onclick="changeReqPage(1)">Forward</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="cvModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <button class="close-btn" onclick="closeCVModal()">×</button>
+
+        <div class="cv-header">
+            <h3 id="modalCvName">Applicant Name</h3>
+            <div class="meta-inline" style="color: #818cf8;" id="modalCvEmail">user@email.com</div>
+        </div>
+
+        <div class="detail-grid">
+            <div class="detail-row">
+                <strong>Profession</strong>
+                <span id="modalCvProfession">N/A</span>
+            </div>
+            <div class="detail-row">
+                <strong>Skills</strong>
+                <span id="modalCvSkills">N/A</span>
+            </div>
+            <div class="detail-row">
+                <strong>Experience</strong>
+                <span id="modalCvExperience">N/A</span>
+            </div>
+            <div class="detail-row">
+                <strong>Education</strong>
+                <span id="modalCvEducation">N/A</span>
+            </div>
+            <div class="detail-row">
+                <strong>Additional Info</strong>
+                <span id="modalCvAbout">N/A</span>
+            </div>
+        </div>
+        <div style="margin-top: 25px; display: flex; gap: 15px;">
+            <button id="acceptCvBtn" class="btn" style="background: #10b981; width: 100%;">Accept</button>
+            <button id="rejectCvBtn" class="btn" style="background: #ef4444; width: 100%;">Reject</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE_URL = 'http://localhost:8080/ybo/openings';
+
+    let token = localStorage.getItem('token');
+    if (token && !token.startsWith('Bearer ')) { token = 'Bearer ' + token; }
+
+    let currentPage = 0, totalPages = 1;
+    let currentOpeningId = null;
+    let reqCurrentPage = 0, reqTotalPages = 1;
+
+    let currentJobRequestsArray = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (!token) {
+            alert("Unauthorized access. Redirecting to login...");
+            window.location.href = '/login';
+            return;
+        }
+        fetchCompanyOpenings(currentPage);
+    });
+
+    function fetchCompanyOpenings(page) {
+        fetch(`${API_BASE_URL}/my-openings?page=${page}&size=10`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', 'Authorization': token }
+        })
+        .then(res => {
+            if (res.status === 401 || res.status === 403) {
+                localStorage.removeItem('token'); window.location.href = '/login';
+            }
+            return res.json();
+        })
+        .then(data => {
+            if (!data) return;
+            totalPages = data.totalPages; currentPage = data.number;
+            renderList(data.content);
+            updatePaginationControls();
+        });
+    }
+
+    function renderList(openings) {
+        const listContainer = document.getElementById("openingsList");
+        listContainer.innerHTML = "";
+        if (!openings || openings.length === 0) {
+            listContainer.innerHTML = "<p class='no-openings'>You haven't posted any job openings yet.</p>"; return;
+        }
+        openings.forEach(op => {
+            listContainer.innerHTML += `
+                <div class="opening-box">
+                    <div class="opening-info">
+                        <div class="profession-title">${op.profession}</div>
+                        <div class="meta-inline">Offered Salary: <strong>${op.salary}</strong></div>
+                    </div>
+                    <button class="btn" onclick="fetchOpeningDetails('${op.id}')">View Details</button>
+                </div>
+            `;
+        });
+    }
+
+    function updatePaginationControls() {
+        document.getElementById("pageInfo").innerText = `Page: ${currentPage + 1} / ${totalPages || 1}`;
+        document.getElementById("prevBtn").disabled = (currentPage === 0);
+        document.getElementById("nextBtn").disabled = (currentPage >= totalPages - 1 || totalPages === 0);
+    }
+    function changePage(dir) { fetchCompanyOpenings(currentPage + dir); }
+
+    function fetchOpeningDetails(id) {
+        currentOpeningId = id;
+        document.getElementById("jobRequestList").innerHTML = "";
+        document.getElementById("reqPagination").classList.add("hidden");
+        document.getElementById("loadReqBtn").setAttribute("onclick", `fetchRequests('${id}', 0)`);
+
+        fetch(`${API_BASE_URL}/${id}`, { method: 'GET', headers: { 'Authorization': token } })
+        .then(res => res.json())
+        .then(opening => {
+            document.getElementById("detProfession").innerText = opening.profession || 'N/A';
+            document.getElementById("detSalary").innerText = opening.salary || 'N/A';
+            document.getElementById("detSchedule").innerText = opening.schedule || 'N/A';
+            document.getElementById("detJobToDo").innerText = opening.jobToDo || 'N/A';
+            document.getElementById("detExperience").innerText = opening.experienceNeeded || 'N/A';
+            document.getElementById("detAddress").innerText = opening.address || 'N/A';
+            document.getElementById("detPhone").innerText = opening.phoneNumber || 'N/A';
+
+            document.getElementById("listView").classList.add("hidden");
+            document.getElementById("detailView").classList.remove("hidden");
+        });
+    }
+
+    function fetchRequests(id, page) {
+        fetch(`${API_BASE_URL}/${id}/job/requests?page=${page}&size=10`, {
+            method: 'GET', headers: { 'Content-Type': 'application/json', 'Authorization': token }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (!data) return;
+            reqTotalPages = data.totalPages; reqCurrentPage = data.number;
+
+            currentJobRequestsArray = data.content;
+
+            renderRequestList(currentJobRequestsArray);
+            updateReqPaginationControls();
+        });
+    }
+
+    function renderRequestList(jobRequests) {
+        const listContainer = document.getElementById("jobRequestList");
+        listContainer.innerHTML = "";
+
+        if (!jobRequests || jobRequests.length === 0) {
+            listContainer.innerHTML = "<p class='no-openings'>No applications received for this opening yet.</p>";
+            document.getElementById("reqPagination").classList.add("hidden");
+            return;
+        }
+
+        jobRequests.forEach(jobRequest => {
+            const prof = jobRequest.cv ? jobRequest.cv.profession : 'N/A';
+            listContainer.innerHTML += `
+                <div class="opening-box">
+                    <div class="opening-info">
+                        <div class="profession-title">Applicant CV: ${prof}</div>
+                    </div>
+                    <button class="btn btn-secondary" style="margin-bottom:0;" onclick="openCVModal('${jobRequest.id}')">View User CV</button>
+                </div>
+            `;
+        });
+        document.getElementById("reqPagination").classList.remove("hidden");
+    }
+
+    function updateReqPaginationControls() {
+        document.getElementById("pageInfoReq").innerText = `Page: ${reqCurrentPage + 1} / ${reqTotalPages || 1}`;
+        document.getElementById("prevBtnReq").disabled = (reqCurrentPage === 0);
+        document.getElementById("nextBtnReq").disabled = (reqCurrentPage >= reqTotalPages - 1 || reqTotalPages === 0);
+    }
+    function changeReqPage(dir) { if (currentOpeningId) fetchRequests(currentOpeningId, reqCurrentPage + dir); }
+    function showListView() { document.getElementById("detailView").classList.add("hidden"); document.getElementById("listView").classList.remove("hidden"); }
+
+    function openCVModal(requestId) {
+        const requestObj = currentJobRequestsArray.find(req => req.id === requestId);
+
+        if (!requestObj || !requestObj.cv) {
+            alert("This applicant has not provided a CV.");
+            return;
+        }
+
+        const cv = requestObj.cv;
+
+        document.getElementById("modalCvName").innerText = cv.firstName || "Unknown Applicant";
+        document.getElementById("modalCvEmail").innerText = cv.email || "No Email Provided";
+        document.getElementById("modalCvProfession").innerText = cv.profession || "N/A";
+        document.getElementById("modalCvSkills").innerText = cv.skills || "N/A";
+        document.getElementById("modalCvExperience").innerText = cv.experience || "N/A";
+        document.getElementById("modalCvEducation").innerText = cv.education || "N/A";
+        document.getElementById("modalCvAbout").innerText = cv.aboutMe || "N/A";
+
+        document.getElementById("acceptCvBtn").onclick = () => handleJobRequest(requestId, 'approve');
+        document.getElementById("rejectCvBtn").onclick = () => handleJobRequest(requestId, 'reject');
+
+        document.getElementById("cvModal").classList.remove("hidden");
+    }
+
+    function handleJobRequest(requestId, action) {
+        fetch(`${API_BASE_URL}/requests/${requestId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': token
+            }
+        })
+        .then(res => {
+            if (res.ok) {
+                closeCVModal();
+                fetchRequests(currentOpeningId, reqCurrentPage);
+            } else {
+                alert("Action failed!");
+            }
+        })
+        .catch(err => console.error(err));
+    }
+
+    function closeCVModal() {
+        document.getElementById("cvModal").classList.add("hidden");
+    }
+
+    document.getElementById('cvModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCVModal();
+        }
+    });
+
+</script>
+</body>
+</html>

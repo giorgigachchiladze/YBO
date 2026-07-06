@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YBO - Find Your Next Opportunity</title>
+
+  <style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    }
+
+    body {
+        background: radial-gradient(circle at top center, #1b1d30 0%, #0c0d14 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: #e2e8f0;
+    }
+
+    .container {
+        background: rgba(22, 24, 38, 0.8);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        padding: 50px 45px;
+        border-radius: 16px;
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        width: 100%;
+        max-width: 460px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-align: center;
+    }
+
+    .logo {
+        font-size: 40px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 14px;
+    }
+
+    p.tagline {
+        color: #94a3b8;
+        font-size: 15px;
+        line-height: 1.6;
+        margin-bottom: 40px;
+    }
+
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .btn {
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-login {
+        background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+        color: white;
+        box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35);
+    }
+
+    .btn-login:hover {
+        box-shadow: 0 6px 18px rgba(79, 70, 229, 0.5);
+        transform: translateY(-1px);
+    }
+
+    .btn-register {
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #e2e8f0;
+    }
+
+    .btn-register:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn:active {
+        transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="logo">YBO</div>
+  <p class="tagline">
+    YBO connects companies and users — post opening or find job,
+    create CV and send request on platform. (Your Best Opportunity)
+  </p>
+
+  <div class="btn-group">
+    <button class="btn btn-login" onclick="window.location.href='/login'">Log In</button>
+    <button class="btn btn-register" onclick="window.location.href='/register'">Register</button>
+  </div>
+</div>
+
+</body>
+</html>

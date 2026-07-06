@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YBO - Dashboard | Post Opening</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top right, #1e2235 0%, #0f1016 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 50px 20px;
+            color: #e2e8f0;
+        }
+
+        .saveOpening-container {
+            background: rgba(31, 34, 53, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 45px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            width: 100%;
+            max-width: 850px;
+            border: 1px solid rgba(47, 52, 84, 0.7);
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+            grid-column: span 2;
+        }
+
+        .btn-dashboard {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #94a3b8;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-dashboard:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-align: center;
+            font-weight: 700;
+            font-size: 32px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 35px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .input-group label {
+            margin-bottom: 8px;
+            color: #94a3b8;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            background: #161824;
+            border: 1px solid #2f3454;
+            border-radius: 6px;
+            font-size: 15px;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+        }
+
+
+        .btn-wrapper {
+            grid-column: span 2;
+            margin-top: 15px;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn-save:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .error-msg {
+            color: #f87171;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            grid-column: span 2;
+            background: rgba(248, 113, 113, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(248, 113, 113, 0.2);
+            display: none;
+        }
+
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .full-width, .btn-wrapper, .error-msg, .top-nav {
+                grid-column: span 1;
+            }
+            .saveCV-container {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="saveOpening-container">
+    <div class="form-grid">
+        <div class="top-nav">
+            <button type="button" class="btn-dashboard" onclick="window.location.href='/company/home'">← Dashboard</button>
+        </div>
+    </div>
+
+    <h2>Post Your Opening</h2>
+    <p class="subtitle">Fill in professional details to build your opening</p>
+
+    <div class="form-grid">
+        <div class="input-group full-width">
+            <label for="profession">Profession / Title</label>
+            <input type="text" id="profession" placeholder="e.g. Full Stack Java Developer" >
+        </div>
+        <div class="input-group full-width">
+            <label for="salary">Salary</label>
+            <input id="salary" placeholder="Enter position's monthly salary" >
+        </div>
+        <div class="input-group full-width">
+            <label for="schedule">Schedule</label>
+            <input id="schedule" placeholder="Amount of work hours and days in week" >
+        </div>
+        <div class="input-group full-width">
+            <label for="experience-needed">Experience needed</label>
+            <input type="text" id="experience-needed" placeholder="e.g., 5 years of working on java..." >
+        </div>
+        <div class="input-group full-width">
+            <label for="job-to-do">Job To Do</label>
+            <textarea id="job-to-do" placeholder="Enter main job need to be done while working as employee for this job" ></textarea>
+        </div>
+
+
+        <div class="btn-wrapper">
+            <button type="button" class="btn-save" onclick="sendPostOpeningRequest()">
+                <span>Post opening</span>
+            </button>
+        </div>
+
+        <p id="errorMessage" class="error-msg"></p>
+    </div>
+</div>
+
+<script>
+    async function sendPostOpeningRequest() {
+
+        const errorParagraph = document.getElementById('errorMessage');
+        errorParagraph.textContent = "";
+        errorParagraph.style.display = "none";
+
+        const token = localStorage.getItem('token')
+
+        const openingData = {
+            profession: document.getElementById('profession').value,
+            salary: document.getElementById('salary').value,
+            schedule: document.getElementById('schedule').value,
+            jobToDo: document.getElementById('job-to-do').value,
+            experienceNeeded: document.getElementById('experience-needed').value
+        };
+
+        for (const [fieldName, value] of Object.entries(openingData)) {
+          if (!value || value === "") {
+              errorParagraph.textContent = `you should fill all rows!`;
+              errorParagraph.style.display = "block";
+              return;
+          }
+        }
+
+        try {
+            const response = await fetch('/ybo/company/create/opening', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(openingData)
+            });
+            if (response.ok) {
+                alert('Opening posted successfully!');
+                return;
+            }
+            if (response.status = 403) {
+                alert('Log in as company first!');
+                window.location.href = '/login';
+                return
+            }
+            const errorData = await response.json();
+            errorParagraph.style.display = "block";
+            errorParagraph.textContent = errorData.message;
+            console.log("error object:", errorData);
+            return;
+        } catch (error) {
+            errorParagraph.style.display = "block";
+            errorParagraph.textContent = "Server error!";
+            console.error("Error:", error);
+            return;
+        }
+
+
+        alert('Log in as company first!');
+        window.location.href = '/login';
+
+    }
+</script>
+</body>
+</html>

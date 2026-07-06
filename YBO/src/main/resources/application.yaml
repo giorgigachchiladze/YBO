@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: YBO
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/YBO_DB
+    username: postgres
+    password: password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    baseline-on-migrate: true
+
+  jjwt:
+    duration: 300000
+    secret: "07c75b4e2b01a3c4c2631b67b0f6554e6202356557a1d6fc43e046725d381843904f83917635c4867e6076d475b201f46ea7a833fb09d36806e0062860c12fc5"

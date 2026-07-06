@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YBO - Register</title>
+
+  <style>
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #12131c 0%, #1a1c29 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 40px 0;
+        color: #f1f1f1;
+    }
+
+    .register-container {
+        background: #1f2235;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #2f3454;
+    }
+
+    h2 {
+        margin-bottom: 25px;
+        color: #ffffff;
+        text-align: center;
+        font-weight: 600;
+        font-size: 26px;
+        letter-spacing: 0.5px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #989fc0;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+
+    .input-group input,
+    .input-group textarea {
+        width: 100%;
+        padding: 12px 14px;
+        background: #161824;
+        border: 1px solid #2f3454;
+        border-radius: 6px;
+        font-size: 15px;
+        color: #ffffff;
+        transition: all 0.3s ease;
+    }
+
+    .input-group textarea {
+        resize: vertical;
+        min-height: 100px;
+        font-family: inherit;
+    }
+
+    .input-group input:focus,
+    .input-group textarea:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 12px;
+        background: #2563eb;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.1s ease;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        margin-top: 10px;
+    }
+
+    .btn-register:hover {
+        background: #1d4ed8;
+    }
+
+    .btn-register:active {
+        transform: scale(0.98);
+    }
+
+    .error-msg {
+        color: #ff4a4a;
+        margin-top: 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+  </style>
+</head>
+<body>
+<div class="register-container">
+  <h2>SignUp to YBO</h2>
+
+  <div class="form-wrapper">
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username" >
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password required">
+    </div>
+    <div class="input-group">
+      <label for="company_name">Company Name</label>
+      <input type="text" id="company_name" placeholder="Enter your company name" >
+    </div>
+    <div class="input-group">
+      <label for="phone_number">Phone Number</label>
+      <input type="text" id="phone_number" placeholder="Enter your phone number" >
+    </div>
+    <div class="input-group">
+      <label for="address">Address</label>
+      <input type="text" id="address" placeholder="Enter your address" >
+    </div>
+    <div class="input-group">
+      <label for="company_description">Company Description</label>
+      <textarea type="text" id="company_description" placeholder="Write about company" ></textarea>
+    </div>
+    <button type="button" class="btn-register" onclick="sendCompanyRegisterRequest()">Sign Up</button>
+    <p id="errorMessage" class="error-msg"></p>
+
+    <button type="button" class="btn-register" onclick="window.location.href='/register'">Register as user</button>
+
+    <button type="button" class="btn-register" onclick="window.location.href='/login'">Already have an account?</button>
+    <p></p>
+
+
+  </div>
+</div>
+
+
+
+<script>
+  async function sendCompanyRegisterRequest() {
+
+      const errorParagraph = document.getElementById('errorMessage');
+      errorParagraph.style.display = "none";
+      errorParagraph.textContent = "";
+
+      const registerData = {
+              companyName: document.getElementById('company_name').value,
+              username: document.getElementById('username').value,
+              password: document.getElementById('password').value,
+              phoneNumber: document.getElementById('phone_number').value,
+              address: document.getElementById('address').value,
+              companyDescription: document.getElementById('company_description').value
+          };
+
+
+      for (const [fieldName, value] of Object.entries(registerData)) {
+        if (!value || value === "") {
+            errorParagraph.textContent = `you should fill all rows!`;
+            errorParagraph.style.display = "block";
+            return;
+        }
+      }
+
+      console.log("request is sent...");
+
+      try {
+        const response = await fetch('/ybo/auth/register/company', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(registerData)
+        });
+
+        if (response.ok) {
+            alert('signed up successfully!');
+            window.location.href = '/login';
+        } else {
+             const errorData = await response.json();
+             errorParagraph.style.display = "block";
+             errorParagraph.textContent = errorData.message;
+             console.log("error object:", errorData)
+        }
+      } catch (error) {
+            errorParagraph.style.display = "block";
+            errorParagraph.textContent = "Server error!";
+            console.error("Error:", error);
+      }
+  }
+</script>
+</body>
+</html>
